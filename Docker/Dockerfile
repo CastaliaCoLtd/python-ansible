@@ -15,7 +15,7 @@ RUN /root/.pyenv/bin/pyenv install 2.7.9
 
 # install ansible
 # ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
-RUN  ln -s /root/.pyenv/versions/2.7.9/bin/pip /usr/bin/python
+RUN  ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 RUN /root/.pyenv/versions/2.7.9/bin/pip install ansible
 
 # pyenv global(python 3.4.3)
