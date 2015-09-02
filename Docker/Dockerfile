@@ -19,4 +19,4 @@ RUN  ln -s /root/.pyenv/versions/2.7.9/bin/pip /usr/bin/python
 RUN /root/.pyenv/versions/2.7.9/bin/pip install ansible
 
 # pyenv global(python 3.4.3)
-/root/.pyenv/bin/pyenv global system
+RUN /root/.pyenv/bin/pyenv global system
