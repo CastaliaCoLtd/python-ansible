@@ -20,3 +20,6 @@ RUN /root/.pyenv/versions/2.7.9/bin/pip install ansible
 
 # pyenv global(python 3.4.3)
 RUN /root/.pyenv/bin/pyenv global system
+
+# for pyquery
+RUN apt-get -y install libxslt1-dev libxml2-dev
