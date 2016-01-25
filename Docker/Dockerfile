@@ -23,3 +23,11 @@ RUN /root/.pyenv/bin/pyenv global system
 
 # for pyquery
 RUN apt-get -y install libxslt1-dev libxml2-dev
+
+# for mysql
+ADD http://dev.mysql.com/get/mysql-apt-config_0.1.5-2ubuntu14.04_all.deb /tmp/
+RUN DEBIAN_FRONTEND=noninteractive dpkg -i /tmp/mysql-apt-config_0.1.5-2ubuntu14.04_all.deb
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
+
+ENTRYPOINT /etc/init.d/mysql start && /bin/bash
+
