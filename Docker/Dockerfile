@@ -30,6 +30,7 @@ RUN /root/.pyenv/bin/pyenv rehash
 # install python 3.5.0
 RUN /root/.pyenv/bin/pyenv install 3.5.0
 RUN /root/.pyenv/bin/pyenv global 3.5.0
+RUN pip install --upgrade pip
 
 # install Groonga
 RUN yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
