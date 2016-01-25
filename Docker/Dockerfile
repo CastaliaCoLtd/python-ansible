@@ -7,7 +7,7 @@ MAINTAINER Urasin <urasin2012@gmail.com>
 RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc
 
 # install mysql
-RUN yum install -y http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+RUN yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm state=present
 RUN yum update -y
 RUN yum install -y mysql-community-server
 
@@ -24,15 +24,20 @@ RUN yum install -y zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel open
 RUN /root/.pyenv/bin/pyenv install 2.7.9
 
 # install ansible
-# ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
-RUN mv /usr/bin/python /usr/bin/python_bak
-RUN  ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 RUN /root/.pyenv/versions/2.7.9/bin/pip install ansible
 RUN /root/.pyenv/bin/pyenv rehash
 
 # install python 3.5.0
 RUN /root/.pyenv/bin/pyenv install 3.5.0
 RUN /root/.pyenv/bin/pyenv global 3.5.0
+
+# install Groonga
+RUN yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+RUN yum install -y mysql-community-mroonga
+
+# ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
+RUN mv /usr/bin/python /usr/bin/python_bak
+RUN  ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 
 ENTRYPOINT /etc/init.d/mysqld start && /bin/bash
 
