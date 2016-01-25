@@ -1,6 +1,15 @@
 # from docker hub
-FROM hardbyte/python3
+FROM centos:centos6
+
 MAINTAINER Urasin <urasin2012@gmail.com>
+
+# install git
+RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc
+
+# install mysql
+RUN yum install -y http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+RUN yum update -y
+RUN yum install -y mysql-community-server
 
 # install pyenv to root
 RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv
@@ -11,23 +20,19 @@ RUN echo 'eval "$(pyenv init -)"' >> /root/.bashrc
 RUN exec $SHELL
 
 # install python 2.7.9
+RUN yum install -y zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel libjpeg-devel libselinux-python mysql-community-devel
 RUN /root/.pyenv/bin/pyenv install 2.7.9
 
 # install ansible
 # ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
+RUN mv /usr/bin/python /usr/bin/python_bak
 RUN  ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 RUN /root/.pyenv/versions/2.7.9/bin/pip install ansible
+RUN /root/.pyenv/bin/pyenv rehash
 
-# pyenv global(python 3.4.3)
-RUN /root/.pyenv/bin/pyenv global system
+# install python 3.5.0
+RUN /root/.pyenv/bin/pyenv install 3.5.0
+RUN /root/.pyenv/bin/pyenv global 3.5.0
 
-# for pyquery
-RUN apt-get -y install libxslt1-dev libxml2-dev
-
-# for mysql
-ADD http://dev.mysql.com/get/mysql-apt-config_0.1.5-2ubuntu14.04_all.deb /tmp/
-RUN DEBIAN_FRONTEND=noninteractive dpkg -i /tmp/mysql-apt-config_0.1.5-2ubuntu14.04_all.deb
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
-
-ENTRYPOINT /etc/init.d/mysql start && /bin/bash
+ENTRYPOINT /etc/init.d/mysqld start && /bin/bash
 
