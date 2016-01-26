@@ -17,7 +17,7 @@ RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv
 RUN echo 'export PYENV_ROOT=$HOME/.pyenv' >> /root/.bashrc
 RUN echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> /root/.bashrc
 RUN echo 'eval "$(pyenv init -)"' >> /root/.bashrc
-RUN exec $SHELL
+RUN source ~/.bashrc
 
 # install python 2.7.9
 RUN yum install -y zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel libjpeg-devel libselinux-python mysql-community-devel
@@ -30,7 +30,8 @@ RUN /root/.pyenv/bin/pyenv rehash
 # install python 3.5.0
 RUN /root/.pyenv/bin/pyenv install 3.5.0
 RUN /root/.pyenv/bin/pyenv global 3.5.0
-RUN pip install --upgrade pip
+RUN /root/.pyenv/bin/pyenv rehash
+RUN /root/.pyenv/shims/pip install --upgrade pip
 
 # install Groonga
 RUN yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
@@ -38,7 +39,7 @@ RUN yum install -y mysql-community-mroonga
 
 # ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
 RUN mv /usr/bin/python /usr/bin/python_bak
-RUN  ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
+RUN ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 
 ENTRYPOINT /etc/init.d/mysqld start && /bin/bash
 
