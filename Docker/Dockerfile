@@ -4,7 +4,7 @@ FROM centos:centos6
 MAINTAINER Urasin <urasin2012@gmail.com>
 
 # install git
-RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc
+RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc gcc-c++
 
 # install mysql
 RUN yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm state=present
