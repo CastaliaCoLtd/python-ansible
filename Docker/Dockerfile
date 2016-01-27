@@ -35,10 +35,7 @@ RUN /root/.pyenv/shims/pip install --upgrade pip
 
 # install Groonga
 RUN yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-RUN yum makecache
 RUN yum install -y mysql-community-mroonga
-RUN echo "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';"| mysql -u root
-RUN service mysqld restart
 
 # ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
 RUN mv /usr/bin/python /usr/bin/python_bak
