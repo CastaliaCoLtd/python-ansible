@@ -32,6 +32,7 @@ RUN /root/.pyenv/bin/pyenv install 3.5.0
 RUN /root/.pyenv/bin/pyenv global 3.5.0
 RUN /root/.pyenv/bin/pyenv rehash
 RUN /root/.pyenv/shims/pip install --upgrade pip
+RUN /root/.pyenv/shims/pip install wheel
 
 # install Groonga
 RUN yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
@@ -42,4 +43,3 @@ RUN mv /usr/bin/python /usr/bin/python_bak
 RUN ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 
 ENTRYPOINT /etc/init.d/mysqld start && /bin/bash
-
