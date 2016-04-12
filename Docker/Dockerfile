@@ -9,7 +9,7 @@ RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc 
 # install mysql
 RUN yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm state=present
 RUN yum update -y
-RUN yum install -y mysql-community-server
+RUN yum install -y -q install mysql-community-server-5.6.29-2.el6.x86_64
 
 # install pyenv to root
 RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv
