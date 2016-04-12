@@ -43,9 +43,4 @@ RUN yum install -y mysql-community-mroonga
 RUN mv /usr/bin/python /usr/bin/python_bak
 RUN ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 
-RUN mv /var/lib/mysql /dev/shm/mysql
-RUN chown -R mysql:mysql /dev/shm/mysql
-RUN ln -s /dev/shm/mysql /var/lib/mysql
-RUN chown -h mysql:mysql /var/lib/mysql
-
 ENTRYPOINT /etc/init.d/mysqld start && /bin/bash
