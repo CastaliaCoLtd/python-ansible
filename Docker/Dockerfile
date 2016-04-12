@@ -10,6 +10,7 @@ RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc 
 RUN yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm state=present
 RUN yum update -y
 RUN yum install -y -q install mysql-community-server-5.6.29-2.el6.x86_64
+RUN yum install -y -q install mysql-community-devel-5.6.29-2.el6.x86_64
 
 # install pyenv to root
 RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv
@@ -20,7 +21,7 @@ RUN echo 'eval "$(pyenv init -)"' >> /root/.bashrc
 RUN source ~/.bashrc
 
 # install python 2.7.9
-RUN yum install -y zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel libjpeg-devel libselinux-python mysql-community-devel
+RUN yum install -y zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel libjpeg-devel libselinux-python
 RUN /root/.pyenv/bin/pyenv install 2.7.9
 
 # install ansible
