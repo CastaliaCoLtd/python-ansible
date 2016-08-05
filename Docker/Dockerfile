@@ -37,7 +37,7 @@ RUN /root/.pyenv/shims/pip install wheel
 
 # install Groonga
 RUN yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-RUN yum install -y mysql57-community-mroonga
+RUN yum install -y mysql57-community-mroonga mysql-devel
 
 # ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
 RUN mv /usr/bin/python /usr/bin/python_bak
