@@ -28,9 +28,9 @@ RUN /root/.pyenv/bin/pyenv install 2.7.9
 RUN /root/.pyenv/versions/2.7.9/bin/pip install ansible
 RUN /root/.pyenv/bin/pyenv rehash
 
-# install python 3.5.0
-RUN /root/.pyenv/bin/pyenv install 3.5.0
-RUN /root/.pyenv/bin/pyenv global 3.5.0
+# install python 3.5.2
+RUN /root/.pyenv/bin/pyenv install 3.5.2
+RUN /root/.pyenv/bin/pyenv global 3.5.2
 RUN /root/.pyenv/bin/pyenv rehash
 RUN /root/.pyenv/shims/pip install --upgrade pip
 RUN /root/.pyenv/shims/pip install wheel
