@@ -4,13 +4,13 @@ FROM centos:centos6
 MAINTAINER Urasin <urasin2012@gmail.com>
 
 # install git
-RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc gcc-c++ libffi-devel
+RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc gcc-c++ yum-utils libffi-devel
 
 # install mysql
 RUN yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm state=present
 RUN yum update -y
-RUN yum install -y -q install mysql-community-server-5.6.29-2.el6.x86_64
-RUN yum install -y -q install mysql-community-devel-5.6.29-2.el6.x86_64
+RUN yum-config-manager --disable mysql56-community
+RUN yum-config-manager --enable mysql57-community
 
 # install pyenv to root
 RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv
@@ -37,10 +37,15 @@ RUN /root/.pyenv/shims/pip install wheel
 
 # install Groonga
 RUN yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-RUN yum install -y mysql-community-mroonga
+RUN yum install -y mysql57-community-mroonga mysql-devel
 
 # ansibleのため/usr/bin/pythonにsymbolic linkをはる(ansibleはlocal, remoteの/ust/bin/pythonを見るため)
 RUN mv /usr/bin/python /usr/bin/python_bak
 RUN ln -s /root/.pyenv/versions/2.7.9/bin/python /usr/bin/python
 
-ENTRYPOINT /etc/init.d/mysqld start && /bin/bash
+RUN rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
+	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
+# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
+	&& chmod 777 /var/run/mysqld
+RUN mysqld --user=mysql --initialize-insecure --datadir="/var/lib/mysql"
+ENTRYPOINT /etc/init.d/mysqld start && mysql -uroot -e "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';" && /bin/bash
