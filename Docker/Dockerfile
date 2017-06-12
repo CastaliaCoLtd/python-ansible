@@ -10,7 +10,10 @@ RUN yum install -y git htop wget curl libxml2-devel libxslt-devel tar patch gcc 
 RUN yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm state=present
 RUN rpm --rebuilddb;yum install -y yum-plugin-ovl
 RUN yum swap -y fakesystemd systemd
-RUN yum update -y
+
+RUN yum update -y && yum -y install glibc-common && localedef -v -c -i ja_JP -f UTF-8 ja_JP.UTF-8; echo "";
+ENV LANG=ja_JP.UTF-8
+
 RUN yum-config-manager --disable mysql56-community
 RUN yum-config-manager --enable mysql57-community
 
@@ -54,4 +57,5 @@ RUN rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
 # ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
 	&& chmod 777 /var/run/mysqld
 RUN mysqld --user=mysql --initialize-insecure --datadir="/var/lib/mysql"
+
 ENTRYPOINT echo "daemonize yes" > redis.conf && redis-server redis.conf && /usr/sbin/mysqld --daemonize --user=mysql && mysql -uroot -e "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';" && /bin/bash
