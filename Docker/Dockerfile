@@ -3,6 +3,7 @@ FROM centos:centos7.1.1503
 
 MAINTAINER Castalia Developers <developers@castalia.co.jp>
 
+
 # install git
 RUN yum install -y git wget curl libxml2-devel libxslt-devel tar patch gcc gcc-c++ yum-utils libffi-devel
 
@@ -11,6 +12,9 @@ RUN yum swap -y fakesystemd systemd
 
 RUN yum update -y && yum -y install glibc-common && localedef -v -c -i ja_JP -f UTF-8 ja_JP.UTF-8; echo "";
 ENV LANG=ja_JP.UTF-8
+
+# install mysql	client
+RUN rpm -Uvh http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm && yum -y install mysql-community-client
 
 # install pyenv to root
 RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv
