@@ -1,36 +1,23 @@
-# from docker hub
 FROM python:3.6.1
 
-MAINTAINER Castalia Developers <developers@castalia.co.jp>
+LABEL maintainer="Castalia Developers <developers@castalia.co.jp>"
 
+# install mysql client
+# デフォルトだと mysql-client-5.5 がインストールされるため 5.7 にする
+ENV MYSQL_MAJOR_VERSION 5.7
+ENV MYSQL_APT_CONFIG_PACKAGE mysql-apt-config_0.8.10-1_all.deb
+RUN \
+  apt-get update && apt-get install lsb-release && \
+  wget https://dev.mysql.com/get/${MYSQL_APT_CONFIG_PACKAGE} && \
+  echo mysql-apt-config	mysql-apt-config/select-server	select	mysql-${MYSQL_MAJOR_VERSION} | debconf-set-selections && \
+  DEBIAN_FRONTEND=noninteractive dpkg -i ${MYSQL_APT_CONFIG_PACKAGE} && \
+  apt-get update && \
+  apt-get install -y mysql-client
 
-# install git
-# RUN yum install -y git wget curl libxml2-devel libxslt-devel tar patch gcc gcc-c++ yum-utils libffi-devel
-
-# RUN rpm --rebuilddb;yum install -y yum-plugin-ovl
-# RUN yum swap -y fakesystemd systemd
-
-# RUN yum update -y && yum -y install glibc-common && localedef -v -c -i ja_JP -f UTF-8 ja_JP.UTF-8; echo "";
-# ENV LANG=ja_JP.UTF-8
-
-# install mysql	client
-RUN apt-get update && apt-get install -y mysql-client libmysqlclient-dev
-
-# install pyenv to root
-# RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv
-
-# RUN echo 'export PYENV_ROOT=$HOME/.pyenv' >> /root/.bashrc
-# RUN echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> /root/.bashrc
-# RUN echo 'eval "$(pyenv init -)"' >> /root/.bashrc
-# RUN source ~/.bashrc
-
-# install python 3.6.1
-# RUN yum install -y make zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel libjpeg-devel libselinux-python
-
-# RUN /root/.pyenv/bin/pyenv install -v 3.6.1
-# RUN /root/.pyenv/bin/pyenv global 3.6.1
-RUN pip install ansible
 RUN pip install --upgrade pip
 RUN pip install wheel
+
+ENV ANSIBLE_VERSION 2.6.3
+RUN pip install ansible==${ANSIBLE_VERSION}
 
 ENTRYPOINT /bin/bash
